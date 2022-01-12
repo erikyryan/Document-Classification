@@ -12,7 +12,7 @@ def readpath(filepath):
 	for filename in files_path:
 		if 'segmentation' not in filename:
 			filenames.append(filename)
-		if len(filenames) == 5:
+		if len(filenames) == 2:
 			break
 
 	return tuple(filenames)
@@ -25,10 +25,10 @@ def read_files(imgs):
 	return tuple(readed_imgs)
 
 #alterando tamanho das imagens
-def resize_img(imgs):
+def resize_img(imgs,size):
 	new_imgs = []
 	for img in imgs:
-		new_imgs.append(cv2.resize(img,(400,400)))
+		new_imgs.append(cv2.resize(img,size))
 
 	return tuple(new_imgs)
 
@@ -40,37 +40,37 @@ def reshape_imgs(imgs,size):
 		new_imgs.append(cv2.reshape(img,size))
 	return tuple(new_imgs)
 '''
-#Apena
-cnh_aberta = readpath('dataset/CNH_Aberta/*.jpg')
-cnh_aberta = read_files(cnh_aberta)
-cnh_aberta = resize_img(cnh_aberta)
-#cnh_aberta = reshape_imgs(cnh_aberta,len(cnh_aberta))
 
 
-#for c in cnh_aberta:
-#	cv2.imshow(c.reshape(1,-1),-1)
-#cv2.imshow("Test",cnh_aberta[1])
-#cv2.waitKey(0)
-
-#for c in cnh_aberta:
-#	print(c)
+def call_funcions(document,size : tuple):
+	document = readpath(document)
+	document = read_files(document)
+	document = resize_img(document,size)
+	return document
 
 
+#Apenas testes para renderizar a imagem
+cnh_aberta = call_funcions('dataset/CNH_Aberta/*.jpg',(400,400))
+cnh_frente = call_funcions('dataset/CNH_Frente/*.jpg',(400,400))
+cnh_verso = call_funcions('dataset/CNH_Verso/*.jpg',(400,400))
+
+cpf_frente = call_funcions('dataset/CPF_Frente/*.jpg',(400,400))
+cpf_verso = call_funcions('dataset/CPF_Verso/*.jpg',(400,400))
+
+rg_frente = call_funcions('dataset/RG_Frente/*.jpg',(400,400))
+rg_verso = call_funcions('dataset/RG_Verso/*.jpg',(400,400))
+rg_aberto = call_funcions('dataset/RG_Aberto/*.jpg',(400,400))
+
+for a,f,i in zip(rg_aberto,rg_frente,rg_verso):
+	cv2.imshow("Test",a)
+	cv2.waitKey(0)
+	cv2.imshow("Test",f)
+	cv2.waitKey(0)
+	cv2.imshow("Test",i)
+	cv2.waitKey(0)
 
 
 '''
-
-
-
-
-
-
-
-
-
-
-
-
 # documents
 x_doc = np.concatenate((cnh_frente,cnh_verso,cnh_aberta,rg_frente,rg_verso,rg_aberto,cpf_frente,cpf_verso),axis=0)
 y_doc = [1,2,3,4,5,6,7,8]
