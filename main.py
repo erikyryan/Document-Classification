@@ -1,30 +1,75 @@
 import cv2
 import numpy as np
+import glob
 from sklearn.svm import SVC
 from sklearn.svm import SVR
 
-# Read all documents
-cnh_aberta = cv2.imread('images/cnh_aberta.jpg')
-cnh_frente = cv2.imread('images/cnh_frente.jpg')
-cnh_verso = cv2.imread('images/cnh_verso.jpg')
-rg_aberto = cv2.imread('images/rg_aberto.jpg')
-rg_frente = cv2.imread('images/rg_verso.jpg')
-rg_verso = cv2.imread('images/rg_verso.jpg')
-cpf_frente = cv2.imread('images/cpf_frente.jpg')
-cpf_verso = cv2.imread('images/cpf_verso.jpg')
+#ler o diretorio(caminho) das imagens
+def readpath(filepath):
+	filenames = []
+	files_path = [f for f in glob.glob(filepath)]
 
-rg_frente_test = cv2.imread('images/cpf_test.jpg')
+	for filename in files_path:
+		if 'segmentation' not in filename:
+			filenames.append(filename)
+		if len(filenames) == 5:
+			break
 
-cnh_aberta = cv2.resize(cnh_aberta,(200,200))
-cnh_frente = cv2.resize(cnh_frente,(200,200))
-cnh_verso = cv2.resize(cnh_verso,(200,200))
-rg_aberto = cv2.resize(rg_aberto,(200,200))
-rg_frente = cv2.resize(rg_frente,(200,200))
-rg_verso = cv2.resize(rg_verso,(200,200))
-cpf_frente = cv2.resize(cpf_frente,(200,200))
-cpf_verso = cv2.resize(cpf_verso,(200,200))
+	return tuple(filenames)
 
-rg_frente_test =cv2.resize(rg_frente_test,(200,200))
+#lendo as imagens
+def read_files(imgs):
+	readed_imgs = []
+	for img in imgs:
+		readed_imgs.append(cv2.imread(img))
+	return tuple(readed_imgs)
+
+#alterando tamanho das imagens
+def resize_img(imgs):
+	new_imgs = []
+	for img in imgs:
+		new_imgs.append(cv2.resize(img,(400,400)))
+
+	return tuple(new_imgs)
+
+	
+'''
+def reshape_imgs(imgs,size):
+	new_imgs = []
+	for img in imgs:
+		new_imgs.append(cv2.reshape(img,size))
+	return tuple(new_imgs)
+'''
+#Apena
+cnh_aberta = readpath('dataset/CNH_Aberta/*.jpg')
+cnh_aberta = read_files(cnh_aberta)
+cnh_aberta = resize_img(cnh_aberta)
+#cnh_aberta = reshape_imgs(cnh_aberta,len(cnh_aberta))
+
+
+#for c in cnh_aberta:
+#	cv2.imshow(c.reshape(1,-1),-1)
+#cv2.imshow("Test",cnh_aberta[1])
+#cv2.waitKey(0)
+
+#for c in cnh_aberta:
+#	print(c)
+
+
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+
 
 # documents
 x_doc = np.concatenate((cnh_frente,cnh_verso,cnh_aberta,rg_frente,rg_verso,rg_aberto,cpf_frente,cpf_verso),axis=0)
@@ -85,3 +130,29 @@ cv2.imshow("Test", rg_frente_test)
 cv2.waitKey(0)
 
 print('---------------------------------------')
+'''
+
+'''
+# Read all documents
+cnh_aberta = cv2.imread('images/cnh_aberta.jpg')
+cnh_frente = cv2.imread('images/cnh_frente.jpg')
+cnh_verso = cv2.imread('images/cnh_verso.jpg')
+rg_aberto = cv2.imread('images/rg_aberto.jpg')
+rg_frente = cv2.imread('images/rg_verso.jpg')
+rg_verso = cv2.imread('images/rg_verso.jpg')
+cpf_frente = cv2.imread('images/cpf_frente.jpg')
+cpf_verso = cv2.imread('images/cpf_verso.jpg')
+
+rg_frente_test = cv2.imread('images/cpf_test.jpg')
+
+cnh_aberta = cv2.resize(cnh_aberta,(200,200))
+cnh_frente = cv2.resize(cnh_frente,(200,200))
+cnh_verso = cv2.resize(cnh_verso,(200,200))
+rg_aberto = cv2.resize(rg_aberto,(200,200))
+rg_frente = cv2.resize(rg_frente,(200,200))
+rg_verso = cv2.resize(rg_verso,(200,200))
+cpf_frente = cv2.resize(cpf_frente,(200,200))
+cpf_verso = cv2.resize(cpf_verso,(200,200))
+
+rg_frente_test =cv2.resize(rg_frente_test,(200,200))
+'''
