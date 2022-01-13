@@ -1,3 +1,4 @@
+from pydoc import doc
 import cv2
 import numpy as np
 import glob
@@ -12,17 +13,17 @@ def readpath(filepath):
 	for filename in files_path:
 		if 'segmentation' not in filename:
 			filenames.append(filename)
-		if len(filenames) == 2:
+		if len(filenames) == 10:
 			break
 
-	return tuple(filenames)
+	return filenames
 
 #lendo as imagens
 def read_files(imgs):
 	readed_imgs = []
 	for img in imgs:
 		readed_imgs.append(cv2.imread(img))
-	return tuple(readed_imgs)
+	return readed_imgs
 
 #alterando tamanho das imagens
 def resize_img(imgs,size):
@@ -30,7 +31,7 @@ def resize_img(imgs,size):
 	for img in imgs:
 		new_imgs.append(cv2.resize(img,size))
 
-	return tuple(new_imgs)
+	return new_imgs
 
 	
 '''
@@ -61,14 +62,44 @@ rg_frente = call_funcions('dataset/RG_Frente/*.jpg',(400,400))
 rg_verso = call_funcions('dataset/RG_Verso/*.jpg',(400,400))
 rg_aberto = call_funcions('dataset/RG_Aberto/*.jpg',(400,400))
 
-for a,f,i in zip(rg_aberto,rg_frente,rg_verso):
-	cv2.imshow("Test",a)
-	cv2.waitKey(0)
-	cv2.imshow("Test",f)
-	cv2.waitKey(0)
-	cv2.imshow("Test",i)
-	cv2.waitKey(0)
+labels = [1,2,3,4,5,6,7,8]
+documents = []
 
+for a,b,c,d,e,f,g,h in zip(cnh_aberta,cnh_frente,cnh_verso,cpf_frente,cpf_verso,rg_frente,rg_verso,rg_aberto):
+	documents.append({'x':a, 'y':labels[0]})
+	documents.append({'x':b,'y':labels[1]})
+	documents.append({'x':c,'y':labels[2]})
+	documents.append({'x':d,'y':labels[3]})
+	documents.append({'x':e,'y':labels[4]})
+	documents.append({'x':f,'y':labels[5]})
+	documents.append({'x':g,'y':labels[6]})
+	documents.append({'x':h,'y':labels[7]})
+
+
+'''
+for p in documents:
+	cv2.imshow("Test",p['x'])
+	print(p['y'])
+	cv2.waitKey(0)
+'''
+
+x_doc = []
+y_doc = []
+
+for document in documents:
+	x_doc.append(document['x']) 
+	y_doc.append(document['y'])
+
+'''
+for p in x_doc:
+	cv2.imshow("Test",p)
+	cv2.waitKey(0)
+'''
+
+x_doc = np.concatenate(x_doc,axis=0)
+
+y_doc = np.array(y_doc)
+y_doc = y_doc.reshape(-1)
 
 '''
 # documents
