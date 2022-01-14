@@ -28,6 +28,7 @@ share/python-wheels/
 MANIFEST
 *.jpg
 *.txt
+*.ini
 
 
 # PyInstaller

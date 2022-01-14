@@ -7,15 +7,17 @@ from sklearn.svm import SVR
 
 #ler o diretorio(caminho) das imagens
 def readpath(filepath):
+	i = 0
 	filenames = []
 	files_path = [f for f in glob.glob(filepath)]
 
 	for filename in files_path:
 		if 'segmentation' not in filename:
 			filenames.append(filename)
-		if len(filenames) == 10:
+			i += 1
+			print(i)
+		if len(filenames) == 50:
 			break
-
 	return filenames
 
 #lendo as imagens
@@ -85,11 +87,16 @@ for p in documents:
 
 x_doc = []
 y_doc = []
-
+i = 0
 for document in documents:
-	x_doc.append(document['x']) 
-	y_doc.append(document['y'])
+	if i == 100:
+		break
+	else:
+		x_doc.append(document['x']) 
+		y_doc.append(document['y'])
+		i += 1
 
+	
 '''
 for p in x_doc:
 	cv2.imshow("Test",p)
@@ -101,16 +108,11 @@ x_doc = np.concatenate(x_doc,axis=0)
 y_doc = np.array(y_doc)
 y_doc = y_doc.reshape(-1)
 
-'''
-# documents
-x_doc = np.concatenate((cnh_frente,cnh_verso,cnh_aberta,rg_frente,rg_verso,rg_aberto,cpf_frente,cpf_verso),axis=0)
-y_doc = [1,2,3,4,5,6,7,8]
-
-#documents
-y_doc = np.array(y_doc)
-y_doc = y_doc.reshape(-1)
-
 x_doc = x_doc.reshape(len(y_doc),-1)
+
+print(x_doc)
+print(40*'--')
+
 
 #document classifier
 document_classifier = SVC(kernel='linear')
@@ -121,49 +123,54 @@ print('Started train of SVC model')
 #Train document with images and indexes
 document_classifier.fit(x_doc,y_doc)
 
-
 print('Finished train')
 print(40 * '-')
 
-#documents
-
-prediction_d  = document_classifier.predict(rg_frente_test.reshape(1,-1))
+prediction_d  = document_classifier.predict(documents[302]['x'].reshape(1,-1))
 
 score_d = document_classifier.score(x_doc,y_doc)
 
+
 # Show prediction
 print('Result: {}'.format(prediction_d))
+
 # Show prediction score
 print('Score of precision: {:.1f}%'.format(score_d * 100))
 
+#cnh_aberta,cnh_frente,cnh_verso,cpf_frente,cpf_verso,rg_frente,rg_verso,rg_aberto
 if prediction_d == 1:
-	result = cnh_frente
+	result = documents[0]['x']
 elif prediction_d == 2:
-	result = cnh_verso
+	result = documents[1]['x']
 elif prediction_d == 3:
-	result = cnh_aberta
+	result = documents[2]['x']
 elif prediction_d == 4:
-	result = rg_frente
+	result = documents[3]['x']
+	print('cpf_frente')
 elif prediction_d == 5:
-	result = rg_verso
+	result = documents[4]['x']
+	print('cpf_verso')
 elif prediction_d == 6:
-	result = rg_aberto
+	result = documents[5]['x']
+	print('rg_frente')
 elif prediction_d == 7:
-	result = cpf_frente
+	result = documents[6]['x']
+	print('rg_verso')
 elif prediction_d == 8:
-	result = cpf_verso
+	result = documents[7]['x']
+	print('rg_aberto')
 
 # Show image based on prediction
 cv2.imshow("Result", result)
 # Show the image tested
-cv2.imshow("Test", rg_frente_test)
+cv2.imshow("Test", documents[302]['x'])
 # Wait for key
 cv2.waitKey(0)
 
 print('---------------------------------------')
-'''
 
 '''
+
 # Read all documents
 cnh_aberta = cv2.imread('images/cnh_aberta.jpg')
 cnh_frente = cv2.imread('images/cnh_frente.jpg')
@@ -186,4 +193,5 @@ cpf_frente = cv2.resize(cpf_frente,(200,200))
 cpf_verso = cv2.resize(cpf_verso,(200,200))
 
 rg_frente_test =cv2.resize(rg_frente_test,(200,200))
+
 '''
