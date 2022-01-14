@@ -2,6 +2,7 @@ from pydoc import doc
 import cv2
 import numpy as np
 import glob
+from sklearn import metrics
 from sklearn.svm import SVC
 from sklearn.svm import SVR
 
@@ -121,12 +122,12 @@ print(40 * '-')
 print('Started train of SVC model')
 
 #Train document with images and indexes
-document_classifier.fit(x_doc,y_doc)
+y = document_classifier.fit(x_doc,y_doc)
 
 print('Finished train')
 print(40 * '-')
 
-prediction_d  = document_classifier.predict(documents[302]['x'].reshape(1,-1))
+prediction_d  = document_classifier.predict(documents[300]['x'].reshape(1,-1))
 
 score_d = document_classifier.score(x_doc,y_doc)
 
@@ -134,8 +135,8 @@ score_d = document_classifier.score(x_doc,y_doc)
 # Show prediction
 print('Result: {}'.format(prediction_d))
 
-# Show prediction score
-print('Score of precision: {:.1f}%'.format(score_d * 100))
+# Show prediction ACCUCARY
+#print('Score of precision:',metrics.accuracy_score(prediction_d,  y))
 
 #cnh_aberta,cnh_frente,cnh_verso,cpf_frente,cpf_verso,rg_frente,rg_verso,rg_aberto
 if prediction_d == 1:
@@ -163,7 +164,7 @@ elif prediction_d == 8:
 # Show image based on prediction
 cv2.imshow("Result", result)
 # Show the image tested
-cv2.imshow("Test", documents[302]['x'])
+cv2.imshow("Test", documents[300]['x'])
 # Wait for key
 cv2.waitKey(0)
 
