@@ -17,7 +17,7 @@ def readpath(filepath):
 		if 'segmentation' not in filename:
 			filenames.append(filename)
 			i += 1
-			print(i)
+
 		if len(filenames) == 100:
 			break
 	return filenames
@@ -43,6 +43,13 @@ def call_funcions(document,size : tuple):
 	document = resize_img(document,size)
 	return document
 
+def started_values(x_values: list,y_values: list):
+	x_values = np.concatenate(x_values,axis=0)
+	y_values = np.array(y_values)
+	y_values = y_values.reshape(-1)
+	x_values = x_values.reshape(len(y_values),-1)
+
+	return x_values,y_values
 
 #Apenas testes para renderizar a imagem
 cnh_aberta = call_funcions('dataset/CNH_Aberta/*.jpg',(400,400))
@@ -96,14 +103,6 @@ for document in documents:
 
 	if i >= 200: break
 	
-
-def started_values(x_values: list,y_values: list):
-	x_values = np.concatenate(x_values,axis=0)
-	y_values = np.array(y_values)
-	y_values = y_values.reshape(-1)
-	x_values = x_values.reshape(len(y_values),-1)
-
-	return x_values,y_values
 '''
 for p in x_doc:
 	cv2.imshow("Test",p)
@@ -113,12 +112,6 @@ for p in x_doc:
 x_doc, y_doc = started_values(x_doc,y_doc)
 x_test, y_test = started_values(x_test,y_test)
 
-
-print(x_doc)
-print(40*'--')
-
-
-#document classifier
 document_classifier = SVC(kernel='linear')
 
 print(40 * '-')
@@ -132,17 +125,11 @@ print(40 * '-')
 
 d = random.choice(documents)
 
-print(type(y_test))
 np.random.shuffle(y_test)
-print('->',y_test)
 
 prediction_d  = document_classifier.predict(d['x'].reshape(1,-1))
 
 #score_d = document_classifier.score(y_test,y_doc)
-
-
-# Show prediction
-print('Result: {}'.format(prediction_d))
 
 # Show ACCUCARY
 print('accuracy_score:',metrics.accuracy_score(y_test,  y_doc))
