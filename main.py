@@ -110,13 +110,6 @@ for p in x_doc:
 	cv2.waitKey(0)
 '''
 
-#x_doc = np.concatenate(x_doc,axis=0)
-
-#y_doc = np.array(y_doc)
-#y_doc = y_doc.reshape(-1)
-
-#x_doc = x_doc.reshape(len(y_doc),-1)
-
 x_doc, y_doc = started_values(x_doc,y_doc)
 x_test, y_test = started_values(x_test,y_test)
 
@@ -185,30 +178,3 @@ cv2.imshow("Test", d['x'])
 cv2.waitKey(0)
 
 print('---------------------------------------')
-
-'''
-
-# Read all documents
-cnh_aberta = cv2.imread('images/cnh_aberta.jpg')
-cnh_frente = cv2.imread('images/cnh_frente.jpg')
-cnh_verso = cv2.imread('images/cnh_verso.jpg')
-rg_aberto = cv2.imread('images/rg_aberto.jpg')
-rg_frente = cv2.imread('images/rg_verso.jpg')
-rg_verso = cv2.imread('images/rg_verso.jpg')
-cpf_frente = cv2.imread('images/cpf_frente.jpg')
-cpf_verso = cv2.imread('images/cpf_verso.jpg')
-
-rg_frente_test = cv2.imread('images/cpf_test.jpg')
-
-cnh_aberta = cv2.resize(cnh_aberta,(200,200))
-cnh_frente = cv2.resize(cnh_frente,(200,200))
-cnh_verso = cv2.resize(cnh_verso,(200,200))
-rg_aberto = cv2.resize(rg_aberto,(200,200))
-rg_frente = cv2.resize(rg_frente,(200,200))
-rg_verso = cv2.resize(rg_verso,(200,200))
-cpf_frente = cv2.resize(cpf_frente,(200,200))
-cpf_verso = cv2.resize(cpf_verso,(200,200))
-
-rg_frente_test =cv2.resize(rg_frente_test,(200,200))
-
-'''
