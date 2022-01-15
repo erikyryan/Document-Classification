@@ -13,7 +13,7 @@ def readpath(filepath):
 			filenames.append(filename)
 			i += 1
 
-		if len(filenames) == 100:
+		if len(filenames) == 300:
 			break
 	return filenames
 
