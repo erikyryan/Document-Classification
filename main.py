@@ -1,4 +1,5 @@
 from pydoc import doc
+import random
 import cv2
 import numpy as np
 import glob
@@ -17,7 +18,7 @@ def readpath(filepath):
 			filenames.append(filename)
 			i += 1
 			print(i)
-		if len(filenames) == 50:
+		if len(filenames) == 100:
 			break
 	return filenames
 
@@ -35,16 +36,6 @@ def resize_img(imgs,size):
 		new_imgs.append(cv2.resize(img,size))
 
 	return new_imgs
-
-	
-'''
-def reshape_imgs(imgs,size):
-	new_imgs = []
-	for img in imgs:
-		new_imgs.append(cv2.reshape(img,size))
-	return tuple(new_imgs)
-'''
-
 
 def call_funcions(document,size : tuple):
 	document = readpath(document)
@@ -88,28 +79,47 @@ for p in documents:
 
 x_doc = []
 y_doc = []
+
+x_test = []
+y_test = []
+
 i = 0
 for document in documents:
-	if i == 100:
-		break
+	if i >= 100:
+		x_test.append(document['x'])
+		y_test.append(document['y'])
+		
 	else:
 		x_doc.append(document['x']) 
 		y_doc.append(document['y'])
-		i += 1
+	i += 1
 
+	if i >= 200: break
 	
+
+def started_values(x_values: list,y_values: list):
+	x_values = np.concatenate(x_values,axis=0)
+	y_values = np.array(y_values)
+	y_values = y_values.reshape(-1)
+	x_values = x_values.reshape(len(y_values),-1)
+
+	return x_values,y_values
 '''
 for p in x_doc:
 	cv2.imshow("Test",p)
 	cv2.waitKey(0)
 '''
 
-x_doc = np.concatenate(x_doc,axis=0)
+#x_doc = np.concatenate(x_doc,axis=0)
 
-y_doc = np.array(y_doc)
-y_doc = y_doc.reshape(-1)
+#y_doc = np.array(y_doc)
+#y_doc = y_doc.reshape(-1)
 
-x_doc = x_doc.reshape(len(y_doc),-1)
+#x_doc = x_doc.reshape(len(y_doc),-1)
+
+x_doc, y_doc = started_values(x_doc,y_doc)
+x_test, y_test = started_values(x_test,y_test)
+
 
 print(x_doc)
 print(40*'--')
@@ -127,16 +137,22 @@ y = document_classifier.fit(x_doc,y_doc)
 print('Finished train')
 print(40 * '-')
 
-prediction_d  = document_classifier.predict(documents[300]['x'].reshape(1,-1))
+d = random.choice(documents)
 
-score_d = document_classifier.score(x_doc,y_doc)
+print(type(y_test))
+np.random.shuffle(y_test)
+print('->',y_test)
+
+prediction_d  = document_classifier.predict(d['x'].reshape(1,-1))
+
+#score_d = document_classifier.score(y_test,y_doc)
 
 
 # Show prediction
 print('Result: {}'.format(prediction_d))
 
-# Show prediction ACCUCARY
-#print('Score of precision:',metrics.accuracy_score(prediction_d,  y))
+# Show ACCUCARY
+print('accuracy_score:',metrics.accuracy_score(y_test,  y_doc))
 
 #cnh_aberta,cnh_frente,cnh_verso,cpf_frente,cpf_verso,rg_frente,rg_verso,rg_aberto
 if prediction_d == 1:
@@ -164,7 +180,7 @@ elif prediction_d == 8:
 # Show image based on prediction
 cv2.imshow("Result", result)
 # Show the image tested
-cv2.imshow("Test", documents[300]['x'])
+cv2.imshow("Test", d['x'])
 # Wait for key
 cv2.waitKey(0)
 
