@@ -1,20 +1,17 @@
 import glob
 import cv2
 import numpy as np
+import os
 
 #ler o diretorio(caminho) das imagens
 def readpath(filepath):
-	i = 0
 	filenames = []
-	files_path = [f for f in glob.glob(filepath)]
 
-	for filename in files_path:
-		if 'segmentation' not in filename:
+	for filename in glob.glob(filepath):
+		if ('segmentation' not in filename) and filename.find('.jpg') != -1:
 			filenames.append(filename)
-			i += 1
-
-		if len(filenames) == 300:
-			break
+		else:
+			os.remove(filename)
 	return filenames
 
 #lendo as imagens
