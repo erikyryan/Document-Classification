@@ -6,10 +6,11 @@ import os
 #ler o diretorio(caminho) das imagens
 def readpath(filepath):
 	filenames = []
-
+	i = 0
 	for filename in glob.glob(filepath):
-		if ('segmentation' not in filename) and filename.find('.jpg') != -1:
+		if ('segmentation' not in filename) and filename.find('.jpg') != -1 and i < 3500:
 			filenames.append(filename)
+			i += 1
 		else:
 			os.remove(filename)
 	return filenames
